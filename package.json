@@ -1,0 +1,27 @@
+{
+	"name": "find-extension-and-copy",
+	"version": "1.0.0",
+	"description": "Find the files by extensions and copy",
+	"main": "dist/index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"tsc": "tsc",
+		"start": "tsc && node ./"
+	},
+	"keywords": [
+		"find files", "find the files by extension"
+	],
+	"author": "CEOmurky <vistaone1@gmail.com>",
+	"license": "ISC",
+	"devDependencies": {
+		"@types/node": "^12.12.11",
+		"package-version-manager": "^1.0.5",
+		"typescript": "^3.7.2"
+	},
+	"feac": {
+		"targetDir": "src",
+		"extensions": [".md", ".png"],
+		"dist": "readme",
+		"replaceFolder": false
+	}
+}

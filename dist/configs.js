@@ -46,7 +46,7 @@ var Config = /** @class */ (function () {
         };
     };
     Config.prototype.parseConfigFromArgv = function () {
-        var presets = ['targetDir', 'extensions', 'dist', 'replaceFolder'];
+        var presets = ['targetDir', 'extensions', 'dist', 'replaceFolder', 'ignore'];
         var result = {};
         process.argv.slice(2, process.argv.length).forEach(function (arg) {
             var key = arg.slice(0, arg.indexOf('='));

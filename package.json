@@ -1,6 +1,6 @@
 {
   "name": "find-extension-and-copy",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Find the files by extensions and copy",
   "main": "dist/index.js",
   "scripts": {

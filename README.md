@@ -2,6 +2,59 @@
 
 find the files by extensions and copy
 
+## usage - without defined in json
+
+`feac targetDir={parameter} extensions=[{extension}, {extension2}, {...args}] dist={parameter} replaceFolder={parameter}`
+
+```json
+"scripts": {
+	"build-readme": "feac targetDir=readme extensions=[.md, .png] dist=readme replaceFolder=true"
+}
+```
+
+## usage - with defined in json
+
+```json
+"scripts": {
+	"build-readme": "feac"
+}
+```
+
+### package.json
+
+```json
+	"feac": {
+		"targetDir": "src",
+		"extensions": [".md", ".png"],
+        "dist": "readme",
+        "replaceFolder": true
+	}
+```
+
+### root/feac.json
+
+```json
+// project root/feac.json
+{
+    "targetDir": "src",
+    "extensions": [".md", ".png"],
+    "dist": "readme",
+    "replaceFolder": true
+}
+```
+
+### configs/feac.json
+
+```json
+// project root/configs/feac.json
+{
+    "targetDir": "src",
+    "extensions": [".md", ".png"],
+    "dist": "readme",
+    "replaceFolder": true
+}
+```
+
 ## example
 
 I need all of src in `.md`, `.png` with folder
@@ -91,41 +144,4 @@ output
     stacked-bar.png
     stacked-column.png
     two-level-pie.png
-```
-
-## usage
-
-### package.json
-
-```json
-	"feac": {
-		"targetDir": "src",
-		"extensions": [".md", ".png"],
-        "dist": "readme",
-        "replaceFolder": true
-	}
-```
-
-### root/feac.json
-
-```json
-// project root/feac.json
-{
-    "targetDir": "src",
-    "extensions": [".md", ".png"],
-    "dist": "readme",
-    "replaceFolder": true
-}
-```
-
-### configs/feac.json
-
-```json
-// project root/configs/feac.json
-{
-    "targetDir": "src",
-    "extensions": [".md", ".png"],
-    "dist": "readme",
-    "replaceFolder": true
-}
 ```

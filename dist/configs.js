@@ -26,8 +26,16 @@ var Config = /** @class */ (function () {
             feacConfig = JSON.parse(fs_1.readFileSync(this.root + '/feac.json', 'utf8'));
         if (fs_1.default.existsSync(this.root + '/configs/feac.json'))
             feacConfig = JSON.parse(fs_1.default.readFileSync(this.root + '/configs/feac.json', 'utf8'));
+        if (process.argv.length > 5)
+            return this.parseConfigFromArgv();
         if (!feacConfig)
             throw new Error('config not found');
+        if (!feacConfig.targetDir)
+            throw new Error('targetDir not found');
+        if (!feacConfig.dist)
+            throw new Error('dist not found');
+        if (!feacConfig.extensions || (feacConfig.extensions || []).length === 0)
+            throw new Error('extensions not found');
         return {
             targetDir: feacConfig.targetDir,
             dist: feacConfig.dist,
@@ -35,6 +43,38 @@ var Config = /** @class */ (function () {
             replaceFolder: feacConfig.replaceFolder
         };
     };
+    Config.prototype.parseConfigFromArgv = function () {
+        var presets = ['targetDir', 'extensions', 'dist', 'replaceFolder'];
+        var result = {};
+        process.argv
+            .slice(2, process.argv.length)
+            .forEach(function (arg) {
+            var key = arg.slice(0, arg.indexOf('='));
+            var value = arg.slice(arg.indexOf('=') + 1, arg.length);
+            if (presets.findIndex(function (preset) { return preset === key; }) === -1)
+                throw new Error('unspecified key = ' + key);
+            if (key === PresetTypes.ReplaceFolder)
+                value = JSON.parse(value);
+            if (key === PresetTypes.Extensions)
+                value = value.toString().replace(/\[|\]/g, '').split(',');
+            result[key] = value;
+        });
+        if (Object.keys(result).length < presets.length)
+            throw new Error('config not found');
+        return {
+            targetDir: result.targetDir,
+            extensions: result.extensions,
+            dist: result.dist,
+            replaceFolder: result.replaceFolder
+        };
+    };
     return Config;
 }());
 exports.Config = Config;
+var PresetTypes;
+(function (PresetTypes) {
+    PresetTypes["TargetDir"] = "targetDir";
+    PresetTypes["Extensions"] = "extensions";
+    PresetTypes["Dist"] = "dist";
+    PresetTypes["ReplaceFolder"] = "replaceFolder";
+})(PresetTypes || (PresetTypes = {}));

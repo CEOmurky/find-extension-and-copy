@@ -27,8 +27,16 @@ export class Config {
 			feacConfig = JSON.parse(readFileSync(this.root + '/feac.json', 'utf8'))
 		if (fs.existsSync(this.root + '/configs/feac.json'))
 			feacConfig = JSON.parse(fs.readFileSync(this.root + '/configs/feac.json', 'utf8'));
+		
+		if (process.argv.length > 5) return this.parseConfigFromArgv();
 
 		if (!feacConfig) throw new Error('config not found');
+
+		if (!feacConfig.targetDir) throw new Error('targetDir not found');
+
+		if (!feacConfig.dist) throw new Error('dist not found');
+
+		if (!feacConfig.extensions || (feacConfig.extensions || [] ).length === 0) throw new Error('extensions not found');
 
 		return {
 			targetDir: feacConfig.targetDir,
@@ -37,6 +45,45 @@ export class Config {
 			replaceFolder: feacConfig.replaceFolder
 		};
 	}
+
+	public parseConfigFromArgv(): ConfigJson {
+		const presets = [ 'targetDir', 'extensions', 'dist', 'replaceFolder' ];
+		let result: {
+			[key: string]: string | string[] | boolean;
+		} = {};
+		process.argv
+			.slice(2, process.argv.length)
+			.forEach( (arg) => {
+				const key = arg.slice(0, arg.indexOf('='));
+				let value: string | string[] | boolean = arg.slice(arg.indexOf('=') + 1, arg.length);
+				
+				
+				if (presets.findIndex((preset: string) => preset === key) === -1)
+					throw new Error('unspecified key = ' + key);
+
+				if (key === PresetTypes.ReplaceFolder) value = JSON.parse(value);
+
+				if (key === PresetTypes.Extensions) value = value.toString().replace(/\[|\]/g, '').split(',');
+				result[key] = value;
+			})
+		
+		if (Object.keys(result).length < presets.length) throw new Error('config not found');
+
+
+		return {
+			targetDir: result.targetDir as string,
+			extensions: result.extensions as string[],
+			dist: result.dist as string,
+			replaceFolder: result.replaceFolder as boolean
+		};
+	}
+}
+
+enum PresetTypes {
+	TargetDir = 'targetDir',
+	Extensions = 'extensions',
+	Dist = 'dist',
+	ReplaceFolder = 'replaceFolder'
 }
 
 interface ConfigJson {

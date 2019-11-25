@@ -16,6 +16,7 @@ var Config = /** @class */ (function () {
         this.extensions = feacConfig.extensions;
         this.dist = feacConfig.dist;
         this.replaceFolder = feacConfig.replaceFolder;
+        this.ignore = feacConfig.ignore;
     }
     Config.prototype.parseConfig = function () {
         var packageJson = JSON.parse(fs_1.default.readFileSync(this.root + '/package.json', 'utf-8'));
@@ -40,22 +41,21 @@ var Config = /** @class */ (function () {
             targetDir: feacConfig.targetDir,
             dist: feacConfig.dist,
             extensions: feacConfig.extensions,
-            replaceFolder: feacConfig.replaceFolder
+            replaceFolder: feacConfig.replaceFolder,
+            ignore: feacConfig.ignore
         };
     };
     Config.prototype.parseConfigFromArgv = function () {
         var presets = ['targetDir', 'extensions', 'dist', 'replaceFolder'];
         var result = {};
-        process.argv
-            .slice(2, process.argv.length)
-            .forEach(function (arg) {
+        process.argv.slice(2, process.argv.length).forEach(function (arg) {
             var key = arg.slice(0, arg.indexOf('='));
             var value = arg.slice(arg.indexOf('=') + 1, arg.length);
             if (presets.findIndex(function (preset) { return preset === key; }) === -1)
                 throw new Error('unspecified key = ' + key);
             if (key === PresetTypes.ReplaceFolder)
                 value = JSON.parse(value);
-            if (key === PresetTypes.Extensions)
+            if (key === PresetTypes.Extensions || key === PresetTypes.Ignore)
                 value = value.toString().replace(/\[|\]/g, '').split(',');
             result[key] = value;
         });
@@ -65,7 +65,8 @@ var Config = /** @class */ (function () {
             targetDir: result.targetDir,
             extensions: result.extensions,
             dist: result.dist,
-            replaceFolder: result.replaceFolder
+            replaceFolder: result.replaceFolder,
+            ignore: result.ignore
         };
     };
     return Config;
@@ -77,4 +78,5 @@ var PresetTypes;
     PresetTypes["Extensions"] = "extensions";
     PresetTypes["Dist"] = "dist";
     PresetTypes["ReplaceFolder"] = "replaceFolder";
+    PresetTypes["Ignore"] = "ignore";
 })(PresetTypes || (PresetTypes = {}));

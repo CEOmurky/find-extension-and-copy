@@ -16,6 +16,8 @@ var Finder = /** @class */ (function () {
         var _this = this;
         var cpDir = this.config.replaceFolder ? dir.substring(this.config.targetDir.length, dir.length) : '';
         var cpRootDir = this.config.root + '/' + this.config.dist + cpDir;
+        if (this.config.ignore && this.config.ignore.some(function (ignore) { return cpDir.indexOf(ignore) !== -1; }))
+            return;
         fs_1.default.readdir(dir, function (err, files) {
             if (err)
                 throw new Error('dir not found : ' + dir);

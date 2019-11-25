@@ -55,6 +55,28 @@ find the files by extensions and copy
 }
 ```
 
+#### ignore patches
+
+add option 'ignore'
+
+
+```json
+// project root/configs/feac.json
+{
+    "targetDir": "src",
+    "extensions": [".md", ".png"],
+    "dist": "readme",
+    "ignore": ["node_modules"]
+}
+```
+
+or 
+
+`feac targetDir={parameter} extensions=[{extension}, {extension2}, {...args}] dist={parameter} replaceFolder={parameter} ignore=node_modules`
+
+
+
+
 ## example
 
 I need all of src in `.md`, `.png` with folder

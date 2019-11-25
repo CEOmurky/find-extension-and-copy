@@ -49,7 +49,7 @@ export class Config {
 	}
 
 	public parseConfigFromArgv(): ConfigJson {
-		const presets = [ 'targetDir', 'extensions', 'dist', 'replaceFolder' ];
+		const presets = [ 'targetDir', 'extensions', 'dist', 'replaceFolder', 'ignore' ];
 		let result: {
 			[key: string]: string | string[] | boolean;
 		} = {};
